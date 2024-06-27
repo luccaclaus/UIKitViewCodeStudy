@@ -10,6 +10,8 @@ import SwiftUI
 
 final class CustomView: UIView {
     
+    let button = UIButton()
+        
     // 1. Creating the new element
     lazy var label: UILabel = {
         // internal label, not the same as the external label

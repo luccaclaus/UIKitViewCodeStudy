@@ -7,13 +7,16 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class FirstScreen: UIViewController {
     
     let nextButton = UIButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupButton()
+        view.backgroundColor = .systemBackground
+        title = "First Screen"
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
 
     func setupButton() {
@@ -23,9 +26,11 @@ class ViewController: UIViewController {
         nextButton.configuration?.baseBackgroundColor = .systemBrown
 //        nextButton.configuration?.image = UIImage(systemName: "plus")
         
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 140, weight: .bold, scale: .large)
-        let boldsd = UIImage(systemName: "plus", withConfiguration: imageConfig)
-        nextButton.setImage(boldsd, for: .normal)
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .large)
+        let boldImg = UIImage(systemName: "plus", withConfiguration: imageConfig)
+        nextButton.setImage(boldImg, for: .normal)
+        
+        nextButton.addTarget(self, action: #selector(goToNextScreen), for: .touchUpInside)
         
         nextButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -34,7 +39,12 @@ class ViewController: UIViewController {
             nextButton.widthAnchor.constraint(equalToConstant: 200),
             nextButton.heightAnchor.constraint(equalToConstant: 50)
         ])
-        
+    }
+    
+    @objc func goToNextScreen() {
+        let nextScreen = SecondScreen()
+        nextScreen.title = "Second Screen"
+        navigationController?.pushViewController(nextScreen, animated: true)
     }
 
 }
