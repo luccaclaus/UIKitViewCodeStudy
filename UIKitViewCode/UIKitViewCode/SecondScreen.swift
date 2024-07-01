@@ -37,6 +37,11 @@ class SecondScreen: UIViewController {
         tableView.delegate = self
         view.addSubview(tableView)
         
+        ///drag and drop functionality delegate
+        tableView.dragDelegate = self
+        tableView.dropDelegate = self
+        tableView.dragInteractionEnabled = true
+        
         setConstraints()
     }
     
@@ -72,6 +77,16 @@ extension SecondScreen: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
+    }
+}
+
+extension SecondScreen: UITableViewDragDelegate, UITableViewDropDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: any UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        <#code#>
+    }
+    
+    func tableView(_ tableView: UITableView, performDropWith coordinator: any UITableViewDropCoordinator) {
+        <#code#>
     }
     
     
