@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		1072E3F22C332EEA002E3747 /* PortfolioTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1072E3F12C332EEA002E3747 /* PortfolioTableViewCell.swift */; };
+		1072E3F42C3475A5002E3747 /* PortfolioCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1072E3F32C3475A5002E3747 /* PortfolioCollectionViewController.swift */; };
+		1072E3F62C3491CF002E3747 /* PortfolioHomeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1072E3F52C3491CF002E3747 /* PortfolioHomeCard.swift */; };
+		1072E3F82C34930D002E3747 /* Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1072E3F72C34930D002E3747 /* Mock.swift */; };
 		108DED962C2DDF980073BFE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108DED952C2DDF980073BFE7 /* AppDelegate.swift */; };
 		108DED982C2DDF980073BFE7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108DED972C2DDF980073BFE7 /* SceneDelegate.swift */; };
 		108DED9A2C2DDF980073BFE7 /* FirstScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108DED992C2DDF980073BFE7 /* FirstScreen.swift */; };
@@ -18,6 +21,9 @@
 
 /* Begin PBXFileReference section */
 		1072E3F12C332EEA002E3747 /* PortfolioTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioTableViewCell.swift; sourceTree = "<group>"; };
+		1072E3F32C3475A5002E3747 /* PortfolioCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioCollectionViewController.swift; sourceTree = "<group>"; };
+		1072E3F52C3491CF002E3747 /* PortfolioHomeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioHomeCard.swift; sourceTree = "<group>"; };
+		1072E3F72C34930D002E3747 /* Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mock.swift; sourceTree = "<group>"; };
 		108DED922C2DDF980073BFE7 /* UIKitViewCode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitViewCode.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		108DED952C2DDF980073BFE7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		108DED972C2DDF980073BFE7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -70,6 +76,7 @@
 				108DED9E2C2DDF990073BFE7 /* Assets.xcassets */,
 				108DEDA02C2DDF990073BFE7 /* LaunchScreen.storyboard */,
 				108DEDA32C2DDF990073BFE7 /* Info.plist */,
+				1072E3F32C3475A5002E3747 /* PortfolioCollectionViewController.swift */,
 			);
 			path = UIKitViewCode;
 			sourceTree = "<group>";
@@ -84,6 +91,8 @@
 		108DEDAA2C2DE2F60073BFE7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				1072E3F52C3491CF002E3747 /* PortfolioHomeCard.swift */,
+				1072E3F72C34930D002E3747 /* Mock.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -175,8 +184,11 @@
 				108DED9A2C2DDF980073BFE7 /* FirstScreen.swift in Sources */,
 				108DED962C2DDF980073BFE7 /* AppDelegate.swift in Sources */,
 				108DED982C2DDF980073BFE7 /* SceneDelegate.swift in Sources */,
+				1072E3F62C3491CF002E3747 /* PortfolioHomeCard.swift in Sources */,
+				1072E3F42C3475A5002E3747 /* PortfolioCollectionViewController.swift in Sources */,
 				1072E3F22C332EEA002E3747 /* PortfolioTableViewCell.swift in Sources */,
 				108DEDB42C2DFA8B0073BFE7 /* SecondScreen.swift in Sources */,
+				1072E3F82C34930D002E3747 /* Mock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

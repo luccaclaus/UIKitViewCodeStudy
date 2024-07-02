@@ -74,10 +74,11 @@ class PortfolioTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: "PortfolioTableViewCell")
         self.selectionStyle = .none
         self.backgroundColor = .clear
-        contentView.backgroundColor = .systemBackground
+        contentView.backgroundColor = .systemGray
         
         hierarchy()
         setConstraints()
+        setupDragInteraction()
     }
     
     required init?(coder: NSCoder) {
@@ -118,4 +119,22 @@ class PortfolioTableViewCell: UITableViewCell {
         self.contentView.layer.shadowOffset = .zero
         self.contentView.layer.shadowRadius = 2
     }
+    
+    private func setupDragInteraction() {
+        let dragInteraction = UIDragInteraction(delegate: self)
+        self.addInteraction(dragInteraction)
+    }
 }
+
+
+extension PortfolioTableViewCell: UIDragInteractionDelegate {
+    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        guard let title = portfolioTitle.text else { return [] }
+        let itemProvider = NSItemProvider(object: title as NSString)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        return [dragItem]
+    }
+    
+    
+}
+

@@ -6,17 +6,10 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 
 class SecondScreen: UIViewController {
-
-    @objc private func back() {
-        dismiss(animated: true)
-    }
     
-    let portfolioTitleArray = ["Stanley's Portfolio", "Lucca's Portfolio", "Thiago's Portfolio", "Pedro's Portfolio", "Fernanda's Portfolio", "Victoria's Portfolio"]
-    
-    let descriptionArray = ["Stanley's Soul", "Lucca's Rock and Roll", "Thiago's Indie", "Pedro's Eminem","Fernanda's Blues","Victoria's Pagode"]
-
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.register(PortfolioTableViewCell.self, forCellReuseIdentifier: "PortfolioTableViewCell")
@@ -30,17 +23,17 @@ class SecondScreen: UIViewController {
         return tableView
     }()
     
+    var portfolioData = Mock()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clear
+        view.backgroundColor = .systemBackground
         tableView.dataSource = self
         tableView.delegate = self
-        view.addSubview(tableView)
-        
-        ///drag and drop functionality delegate
         tableView.dragDelegate = self
         tableView.dropDelegate = self
         tableView.dragInteractionEnabled = true
+        view.addSubview(tableView)
         
         setConstraints()
     }
@@ -58,7 +51,7 @@ class SecondScreen: UIViewController {
 
 extension SecondScreen: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return portfolioTitleArray.count
+        return portfolioData.portfolios.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -66,12 +59,12 @@ extension SecondScreen: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
         let rank = (indexPath.row + 1)
-        let portfolios = portfolioTitleArray[indexPath.row]
-        let description = descriptionArray[indexPath.row]
+        let portfolios = portfolioData.portfolios[indexPath.row].title
+        let description = portfolioData.portfolios[indexPath.row].shortDescription
         cell.set(portfolioFormat: portfolios, index: rank, description: description)
         cell.layer.cornerRadius = 8
         cell.clipsToBounds = true
-    
+        
         return cell
     }
     
@@ -81,13 +74,89 @@ extension SecondScreen: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension SecondScreen: UITableViewDragDelegate, UITableViewDropDelegate {
+    
     func tableView(_ tableView: UITableView, itemsForBeginning session: any UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        <#code#>
+        let portfolio = portfolioData.portfolios[indexPath.row]
+        let itemProvider = NSItemProvider.init(object: portfolio)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        
+        return [dragItem]
     }
     
+    func tableView(_ tableView: UITableView, dragSessionWillBegin session: any UIDragSession) {
+        
+    }
+    
+    func tableView(_ tableView: UITableView, dragSessionDidEnd session: any UIDragSession) {
+        
+    }
+    
+    func tableView(_ tableView: UITableView, canHandle session: any UIDropSession) -> Bool {
+        session.canLoadObjects(ofClass: PortfolioHomeCard.self)
+    }
+    
+    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: any UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        var dropProposal = UITableViewDropProposal(operation: .cancel)
+        
+        guard session.items.count == 1 else { return dropProposal }
+        
+        if tableView.hasActiveDrag {
+            if tableView.isEditing {
+                dropProposal = UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+            }
+        } else {
+            dropProposal = UITableViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
+        }
+        
+        return dropProposal
+    }
+    
+    
     func tableView(_ tableView: UITableView, performDropWith coordinator: any UITableViewDropCoordinator) {
-        <#code#>
+        let destinationIndexPath: IndexPath
+        
+        print("jeff")
+        
+        if let indexPath = coordinator.destinationIndexPath {
+            destinationIndexPath = indexPath
+        } else {
+            let section = tableView.numberOfSections - 1
+            let row = tableView.numberOfRows(inSection: section)
+            destinationIndexPath = IndexPath(row: row, section: section)
+        }
+        
+        // attempt to load strings from the drop coordinator
+        coordinator.session.loadObjects(ofClass: PortfolioHomeCard.self) { portfolios in
+            
+            // convert the item provider array to a string array or bail out
+            DispatchQueue.main.async {
+                
+                print("entered stirngs")
+                guard let portfolios = portfolios as? [PortfolioHomeCard] else { return }
+                
+                
+                // create an empty array to track rows we've copied
+                var indexPaths = [IndexPath]()
+                
+                // loop over all the strings we received
+                for (index, portfolio) in portfolios.enumerated() {
+                    // create an index path for this new row, moving it down depending on how many we've already inserted
+                    let indexPath = IndexPath(row: destinationIndexPath.row + index, section: destinationIndexPath.section)
+                    
+                    // insert the copy into the correct array
+                    self.portfolioData.portfolios.insert(portfolio, at: indexPath.row)
+                    
+                    // keep track of this new row
+                    indexPaths.append(indexPath)
+                }
+                
+                // insert them all into the table view at once
+                tableView.insertRows(at: indexPaths, with: .automatic)
+            }
+        }
     }
     
     
 }
+
+

@@ -12,6 +12,7 @@ class FirstScreen: UIViewController {
     
     let imageView = UIImageView()
     let nextButton = UIButton()
+    let collectionViewButton = UIButton()
         
     let stack = UIStackView() //test stack
     
@@ -20,8 +21,9 @@ class FirstScreen: UIViewController {
         super.viewDidLoad()
         let interaction = UIContextMenuInteraction(delegate: self)
         nextButton.addInteraction(interaction)
-        drawRectangle()
+        //drawRectangle()
         setupButton()
+        setupCollectionViewButton()
         view.backgroundColor = .systemBackground
         title = "First Screen"
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -54,6 +56,28 @@ class FirstScreen: UIViewController {
         ])
     }
     
+    func setupCollectionViewButton() {
+        view.addSubview(collectionViewButton)
+        
+        collectionViewButton.configuration = .filled()
+        collectionViewButton.configuration?.baseBackgroundColor = .systemGreen
+        //        nextButton.configuration?.image = UIImage(systemName: "plus")
+        
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold, scale: .large)
+        let boldImg = UIImage(systemName: "chevron.right", withConfiguration: imageConfig)
+        collectionViewButton.setImage(boldImg, for: .normal)
+        
+        collectionViewButton.addTarget(self, action: #selector(goToCollectionViewScreen), for: .touchUpInside)
+        
+        collectionViewButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            collectionViewButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            collectionViewButton.centerYAnchor.constraint(equalTo: nextButton.centerYAnchor, constant: 70),
+            collectionViewButton.widthAnchor.constraint(equalToConstant: 200),
+            collectionViewButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+    
     
     
     @objc func goToNextScreen() {
@@ -61,6 +85,23 @@ class FirstScreen: UIViewController {
         nextScreen.title = "Second Screen"
         navigationController?.pushViewController(nextScreen, animated: true)
     }
+    
+    @objc func goToCollectionViewScreen() {
+        //Creating layout
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: (view.frame.size.width / 3) - 3, height: (view.frame.size.height / 3) - 3)
+        layout.minimumLineSpacing = 1
+        layout.minimumInteritemSpacing = 1
+        layout.scrollDirection = .vertical
+        layout.sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
+        
+        // Collection VC
+        let nextScreen = PortfolioCollectionViewController(collectionViewLayout: layout)
+        nextScreen.title = "Portfolio"
+        navigationController?.pushViewController(nextScreen, animated: true)
+    }
+    
+    
     
     
     func drawRectangle() {
