@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 
 class PortfolioTableViewCell: UITableViewCell {
 
@@ -74,11 +75,18 @@ class PortfolioTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: "PortfolioTableViewCell")
         self.selectionStyle = .none
         self.backgroundColor = .clear
+        self.isUserInteractionEnabled = true
         contentView.backgroundColor = .systemGray
+        
+//        setupDragAndDrop()
+        let dropInteraction = UIDropInteraction(delegate: self)
+        self.addInteraction(dropInteraction)
+        
+        let dragInteraction = UIDragInteraction(delegate: self)
+        self.addInteraction(dragInteraction)
         
         hierarchy()
         setConstraints()
-        setupDragInteraction()
     }
     
     required init?(coder: NSCoder) {
@@ -120,21 +128,61 @@ class PortfolioTableViewCell: UITableViewCell {
         self.contentView.layer.shadowRadius = 2
     }
     
-    private func setupDragInteraction() {
+    // Make this custom cell work with drag and drop operations
+    func setupDragInteraction() {
         let dragInteraction = UIDragInteraction(delegate: self)
         self.addInteraction(dragInteraction)
+    }
+    
+    func setupDropInteraction() {
+        let dropInteraction = UIDropInteraction(delegate: self)
+        self.addInteraction(dropInteraction)
+    }
+    
+    func setupDragAndDrop() {
+        setupDragInteraction()
+        setupDropInteraction()
     }
 }
 
 
-extension PortfolioTableViewCell: UIDragInteractionDelegate {
+extension PortfolioTableViewCell: UIDragInteractionDelegate, UIDropInteractionDelegate {
+    //MARK: - Drag Interaction Methods
     func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
-        guard let title = portfolioTitle.text else { return [] }
-        let itemProvider = NSItemProvider(object: title as NSString)
+        let portfolio = PortfolioHomeCard(title: self.portfolioTitle.text ?? "SÂNDERO", shortDescription: self.portfolioShortDescription.text ?? "JORGE")
+        let itemProvider = NSItemProvider(object: portfolio)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
     }
     
+    //MARK: - Drop Interaction Methods
+    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: any UIDropSession) -> Bool {
+        print(session.canLoadObjects(ofClass: PortfolioHomeCard.self))
+        return session.canLoadObjects(ofClass: PortfolioHomeCard.self)
+    }
     
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidEnter session: any UIDropSession) {
+        print("sessionDidEnter")
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidExit session: any UIDropSession) {
+        print("sessionDidExit")
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidEnd session: any UIDropSession) {
+        print("sessionDidEnd")
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: any UIDropSession) {
+        print("lalalala")
+        session.loadObjects(ofClass: PortfolioHomeCard.self) { portfolios in
+            guard let portfolios = portfolios as? [PortfolioHomeCard], let firstPortfolio = portfolios.first else { return }
+            self.portfolioTitle.text = firstPortfolio.title
+            self.portfolioShortDescription.text = firstPortfolio.shortDescription
+        }
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: any UIDropSession) -> UIDropProposal {
+        return UITableViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
+    }
 }
-

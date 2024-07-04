@@ -45,9 +45,9 @@ final class PortfolioHomeCard: NSObject, NSItemProviderWriting, NSItemProviderRe
     var title: String
     var shortDescription: String
     
-    init(title: String, description: String) {
+    init(title: String, shortDescription: String) {
         self.title = title
-        self.shortDescription = description
+        self.shortDescription = shortDescription
     }
 }
 
